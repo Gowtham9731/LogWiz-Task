@@ -32,7 +32,6 @@ export class UserRegisterComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private httpClient: HttpClient,
-    private matDialog: MatDialog,
     private router: Router,
     public activeRoute: ActivatedRoute,
     private apiService: ApiServicesService,
@@ -49,21 +48,21 @@ export class UserRegisterComponent implements OnInit {
       selectedCity: ['', Validators.required],
       Gender: ['', Validators.required],
       createPass: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)]],
-      confirmPass: ['', [Validators.required, this.matchPasswords.bind(this)]]
-    }, { validator: this.matchPasswords });
+      confirmPass: ['', [Validators.required, this.apiService.matchPasswords.bind(this)]]
+    }, { validator: this.apiService.matchPasswords });
 
 
 
   }
-  matchPasswords(formGroup: FormGroup) {
-    const password = formGroup.get('createPass')?.value;
-    const confirmPassword = formGroup.get('confirmPass')?.value;
-    if (password !== confirmPassword) {
-      formGroup.get('confirmPass')?.setErrors({ passwordMismatch: true });
-    } else {
-      formGroup.get('confirmPass')?.setErrors(null);
-    }
-  }
+  // matchPasswords(formGroup: FormGroup) {
+  //   const password = formGroup.get('createPass')?.value;
+  //   const confirmPassword = formGroup.get('confirmPass')?.value;
+  //   if (password !== confirmPassword) {
+  //     formGroup.get('confirmPass')?.setErrors({ passwordMismatch: true });
+  //   } else {
+  //     formGroup.get('confirmPass')?.setErrors(null);
+  //   }
+  // }
 
   ngOnInit() {
 
@@ -146,7 +145,7 @@ export class UserRegisterComponent implements OnInit {
   onCountryChange() {
 
     const selectedCountry = this.getSelectedCountry();
-    const countryData = this.getCountryData(selectedCountry);
+    const countryData = this.getCountryDataa(selectedCountry);
     this.filteredStates = this.getFilteredStates(countryData);
     this.updateStateAndCity(countryData);
     this.resetFormControls();
@@ -156,7 +155,7 @@ export class UserRegisterComponent implements OnInit {
     return this.userReg.value.selectedCountry;
   }
 
-  getCountryData(selectedCountry: string): any {
+  getCountryDataa(selectedCountry: string): any {
     return this.countries.find((country: { countryname: any; }) => country.countryname === selectedCountry);
   }
 
@@ -183,7 +182,7 @@ export class UserRegisterComponent implements OnInit {
     this.userReg.patchValue({ selectedState: '' });
     this.city = [];
     this.filteredCities = [];
-    this.city = [];
+    // this.city = [];
   }
 
   onStateChange(event: any) {

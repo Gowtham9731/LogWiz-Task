@@ -15,11 +15,7 @@ export class UserReportComponent {
 
   displayedColumns: string[] = ['id', 'empname', 'date', 'mobnum', 'Gender', 'address', 'selectedCountry', 'selectedState', 'selectedCity', 'action', 'delete'];
 
-  public empDetails: any = [];
-  emp: any;
-
   dataSource!: MatTableDataSource<any>;
-  router: any;
 
   reportForm: FormGroup;
   dataCopy: any;
@@ -30,19 +26,9 @@ export class UserReportComponent {
   genderName: string = '';
   selectedCountry: any;
 
-  gender: string = '';
-  genderValue: any;
   countryValue: any;
   genderData: any;
   filteredCountryData: any;
-  searchState: any;
-  selectedGender: any;
-  paithiyam: any;
-  allgender: any;
-  mudiyala: any;
-  allGenderArray: any;
-  AllGenderValues: any;
-  uniqueGendersSet: any;
   countries: any;
   stateList: any;
   citiList: any;
@@ -51,6 +37,7 @@ export class UserReportComponent {
   countryDa: any;
   filteredStates: any;
   state: any;
+  filteredCities: any;
 
   constructor(private fb: FormBuilder,
     private httpClient: HttpClient,
@@ -102,7 +89,6 @@ export class UserReportComponent {
     })
   }
 
-  
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -113,21 +99,19 @@ export class UserReportComponent {
   onCountryFilter() {
     this.countryValue = this.reportForm.value.countryName;
     this.filteredStates = this.stateList.filter((state: { countryname: any; }) => state.countryname === this.countryValue);
-    console.log(this.filteredStates)
 
     this.countryDa = this.countries.find((country: { countryname: any; }) => country.countryname === this.countryValue);
-    console.log(this.countryDa)
-
 
     if (this.genderData) {
       this.filteredCountryData = this.genderData.filter((item: any) => item.selectedCountry === this.countryValue);
-      console.log(this.filteredCountryData)
       this.dataSource = this.filteredCountryData;
 
     } else {
-      alert('select the Gender');
+      alert('Please select a valid country.');
       this.filteredCountryData = [];
+      this.filteredStates = [];
       this.reportForm.patchValue({ countryName: '' });
+
     }
 
 
@@ -136,37 +120,26 @@ export class UserReportComponent {
   genderFilter() {
 
     const selectedGender = this.reportForm.value.genderName;
-    console.log(selectedGender);
-
     this.genderData = this.dataCopy.filter((item: { Gender: string; }) => item.Gender.toLowerCase() === selectedGender);
     this.dataSource = this.genderData;
   }
 
   stateFilter() {
-
-    const stateValue = this.reportForm.value.stateName;
-    console.log(stateValue)
-
     this.stateValue = this.reportForm.value.stateName;
-
+    this.filteredStates = this.stateList.filter((state: { countryname: any; }) => state.countryname === this.countryValue);
     if (this.filteredCountryData) {
       this.filteredStateData = this.filteredCountryData.filter((item: any) => item.selectedState === this.stateValue);
-      console.log(this.filteredStateData)
-
       this.dataSource = this.filteredStateData;
 
     } else {
       alert('select the Country');
       this.filteredStateData = [];
-      this.reportForm.patchValue({ stateName: '' });
     }
 
   }
   toClear() {
-
     this.reportForm.reset();
     this.getEmployeDetails();
-
   }
 
 
@@ -193,7 +166,7 @@ export class UserReportComponent {
   }
 
   addEmployee() {
-    this.router.navigateByUrl('/userRegister');
+    this.routing.navigateByUrl('/userRegister');
   }
 }
 

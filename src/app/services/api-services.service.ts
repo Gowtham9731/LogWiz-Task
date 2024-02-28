@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ValidatorFn, AbstractControl } from '@angular/forms';
+import { ValidatorFn, AbstractControl, FormGroup } from '@angular/forms';
 import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
@@ -24,6 +24,17 @@ export class ApiServicesService {
     return this.httpClient.get<any>('https://retoolapi.dev/ah0eW7/empreg');
   }
 
+  matchPasswords(formGroup: FormGroup) {
+    const password = formGroup.get('createPass')?.value;
+    const confirmPassword = formGroup.get('confirmPass')?.value;
+    if (password !== confirmPassword) {
+      formGroup.get('confirmPass')?.setErrors({ passwordMismatch: true });
+    } else {
+      formGroup.get('confirmPass')?.setErrors(null);
+    }
+  }
+
+  
  
   deleteUser(id: number): Observable<any> {
     return this.httpClient.delete(`https://retoolapi.dev/lcqe0N/empData/${id}`)
@@ -58,6 +69,8 @@ export class ApiServicesService {
   getEmployeeDetails(): Observable<any> {
     return this.httpClient.get('https://retoolapi.dev/lcqe0N/empData');
   }
+
+ 
 
  
 }
