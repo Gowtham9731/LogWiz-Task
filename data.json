@@ -1,0 +1,150 @@
+{
+  "country": [
+    {
+      "countryid": 1,
+      "countryname": "INDIA"
+    },
+    {
+      "countryid": 2,
+      "countryname": "UK"
+    },
+    {
+      "countryid": 3,
+      "countryname": "US"
+    },
+    {
+      "countryid": 4,
+      "countryname": "AUS"
+    }
+  ],
+  "States": [
+    {
+      "statename": "TamilNadu",
+      "stateid": "1",
+      "countryid": "1",
+      "countryname": "INDIA"
+    },
+    {
+      "statename": "Kerala",
+      "stateid": "2",
+      "countryid": "1",
+      "countryname": "INDIA"
+    },
+    {
+      "statename": "Karnataka",
+      "stateid": "3",
+      "countryid": "1",
+      "countryname": "INDIA"
+    },
+    {
+      "statename": "New York",
+      "stateid": "4",
+      "countryid": "2",
+      "countryname": "US"
+    },
+    {
+      "statename": "California",
+      "stateid": "5",
+      "countryid": "2",
+      "countryname": "US"
+    },
+    {
+      "statename": "London",
+      "stateid": "6",
+      "countryid": "3",
+      "countryname": "UK"
+    },
+    {
+      "statename": "Manchester",
+      "stateid": "7",
+      "countryid": "3",
+      "countryname": "UK"
+    },
+    {
+      "statename": "Queensland",
+      "stateid": "8",
+      "countryid": "4",
+      "countryname": "AUS"
+    },
+    {
+      "statename": "Tasmania",
+      "stateid": "9",
+      "countryid": "4",
+      "countryname": "AUS"
+    }
+  ],
+  "cities": [
+    {
+      "cityname": "Tiruvannamalai",
+      "statename": "TamilNadu",
+      "stateid": "1",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Chennai",
+      "statename": "TamilNadu",
+      "stateid": "1",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Madurai",
+      "statename": "TamilNadu",
+      "stateid": "1",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Tiruvandhram",
+      "statename": "Kerala",
+      "stateid": "2",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Kochi",
+      "statename": "Kerala",
+      "stateid": "2",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Bangalore",
+      "statename": "Karnataka",
+      "stateid": "3",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Ubli",
+      "statename": "Karnataka",
+      "stateid": "3",
+      "countryid": "1"
+    },
+    {
+      "cityname": "Old yark",
+      "statename": "New York",
+      "stateid": "4",
+      "countryid": "2"
+    },
+    {
+      "cityname": "Banana",
+      "statename": "New York",
+      "stateid": "4",
+      "countryid": "2"
+    },
+    {
+      "cityname": "Theriyathu",
+      "statename": "California",
+      "stateid": "5",
+      "countryid": "2"
+    },
+    {
+      "cityname": "Vanakkam",
+      "statename": "London",
+      "stateid": "6",
+      "countryid": "3"
+    },
+    {
+      "cityname": "Mapla",
+      "statename": "London",
+      "stateid": "6",
+      "countryid": "3"
+    }
+  ]
+}
