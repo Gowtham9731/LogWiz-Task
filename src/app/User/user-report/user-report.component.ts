@@ -64,7 +64,7 @@ export class UserReportComponent {
 
     this.getEmployeDetails();
 
-    this.JsonData();
+    this.AllapiData();
 
   }
 
@@ -81,7 +81,7 @@ export class UserReportComponent {
     })
   }
 
-  JsonData() {
+  AllapiData() {
     this.apiService.getCountryData().subscribe((data) => {
       this.countries = data;
     })
@@ -106,7 +106,7 @@ export class UserReportComponent {
 
   onCountryFilter(event: any) {
     this.countryValue = event.value;
-    this.filteredStates = this.apiService.getFilteredStates(this.countryValue,this.stateList)
+    this.filteredStates = this.apiService.getFilteredStates(this.countryValue, this.stateList)
     if (this.filterGender) {
       this.filterCountry = this.apiService.getFilteredCountry(this.countryValue, this.filterGender);
       this.dataSource = this.filterCountry;
@@ -124,14 +124,14 @@ export class UserReportComponent {
     if (stateValue) {
       this.filteredstateValues = this.apiService.filteredStates(stateValue, this.filterCountry);
       this.dataSource = this.filteredstateValues;
-    }else{
+    } else {
       Swal.fire('Warning...', "First Select Country", 'warning');
       this.reportForm.patchValue({ stateName: '' });
     }
 
   }
 
-  
+
   toClear() {
     this.reportForm.reset();
     this.getEmployeDetails();
@@ -139,13 +139,26 @@ export class UserReportComponent {
 
 
   deleteEmployee(id: number) {
-    this.apiService.deleteUser(id).subscribe({
-      next: (res) => {
-        alert('successFull Deleted')
-        this.getEmployeDetails();
-      },
-      error: console.log,
 
+    Swal.fire({
+      title: 'Aru You Want to Delete?',
+      text: 'You will not able to recover this file!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes Delete It',
+      cancelButtonText: 'No Keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.apiService.deleteUser(id).subscribe({
+          next: (res) => {
+            Swal.fire('Deleted', 'Your File has been Deleted', 'success');
+            this.getEmployeDetails();
+          },
+          error: console.log,
+        })
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'Your File is Safe', 'error');
+      }
     })
   }
 

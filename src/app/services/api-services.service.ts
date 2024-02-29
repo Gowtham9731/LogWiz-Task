@@ -7,27 +7,12 @@ import { Observable, catchError, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiServicesService {
-  userReg: any;
- 
-  countries: any;
-  stateList: any;
-  citiList: any;
-  countryList: any;
-  trailForm: any;
-  city: any;
-  filteredCities: any;
-  state: any;
-  reportForm: any;
-  genderData: any;
-  dataCopy: any;
-  dataSource: any;
 
   constructor(private httpClient: HttpClient) { }
 
   getData(): Observable<any> {
     return this.httpClient.get<any>('https://retoolapi.dev/ah0eW7/empreg');
   }
-
 
 
   matchPasswords(formGroup: FormGroup) {
@@ -115,26 +100,7 @@ export class ApiServicesService {
       return [];
     }
   }
-
-   // updateStateAndCity(selectedCountry: any) {
-  //   if (selectedCountry) {
-  //     this.userReg.controls['selectedCity'].reset();
-  //     this.city = [];
-  //   } else {
-  //     this.state = [];
-  //   }
-  // }
-
-  // updateCity(selectedState : any){
-  //   if (selectedState) {
-  //     return this.filteredCities=this.getFilteredCities(selectedState,this.citiList);
-  //   } else {
-  //     this.filteredCities = [];
-
-  //   }
-  // }
-
-  
+ 
  
 }
 

@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiServicesService } from 'src/app/services/api-services.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-register',
@@ -69,18 +70,7 @@ export class UserRegisterComponent implements OnInit {
     }, { validator: this.apiService.matchPasswords });
 
   }
-  // matchPasswords(formGroup: FormGroup) {
-  //   const password = formGroup.get('createPass')?.value;
-  //   const confirmPassword = formGroup.get('confirmPass')?.value;
-  //   if (password !== confirmPassword) {
-  //     formGroup.get('confirmPass')?.setErrors({ passwordMismatch: true });
-  //   } else {
-  //     formGroup.get('confirmPass')?.setErrors(null);
-  //   }
-  // }
-
-
-
+  
   getEmployeDetails() {
     this.apiService.getEmployeeDetails().subscribe({
       next: (res) => {
@@ -89,7 +79,7 @@ export class UserRegisterComponent implements OnInit {
           if (items.id === Number(this.employeeId.id)) {
             this.employeeData = items;
             this.userReg.patchValue(items)
-            this.fetchJsonData();
+            this.getUserDetails();
           }
         })
       },
@@ -111,13 +101,9 @@ export class UserRegisterComponent implements OnInit {
   }
 
 
-  fetchJsonData() {
+  getUserDetails() {
 
     console.log(this.employeeData)
-    this.apiService.getCountryData().subscribe((data) => {
-      this.countries = data;
-    })
-
     this.apiService.getStateData().subscribe((data) => {
       this.stateList = data;
       if (this.employeeData.selectedCountry) {
@@ -185,7 +171,7 @@ export class UserRegisterComponent implements OnInit {
         const employeeId = this.employeeId.id;
         this.httpClient.put(`https://retoolapi.dev/lcqe0N/empData/${employeeId}`, formData).subscribe({
           next: (val: any) => {
-            alert("Employee Detail Updated");
+            Swal.fire("Thank You...",'Employee Detail Updated','success');
             this.router.navigate(['/userReport']);
           },
           error: (err) => {
@@ -196,7 +182,7 @@ export class UserRegisterComponent implements OnInit {
       } else {
         this.httpClient.post('https://retoolapi.dev/lcqe0N/empData', formData).subscribe({
           next: (data: any) => {
-            alert("Registered Successfully");
+            Swal.fire('Succefully...',"User Detail Registered",'success')
             this.router.navigate(['/userReport']);
           },
           error: (err) => {
