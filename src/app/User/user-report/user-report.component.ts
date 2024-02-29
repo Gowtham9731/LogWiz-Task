@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ApiServicesService } from 'src/app/services/api-services.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-report',
@@ -38,6 +39,9 @@ export class UserReportComponent {
   filteredStates: any;
   state: any;
   filteredCities: any;
+  filterCountry: any;
+  filterGender: any;
+  filteredstateValues: any;
 
   constructor(private fb: FormBuilder,
     private httpClient: HttpClient,
@@ -89,54 +93,45 @@ export class UserReportComponent {
     })
   }
 
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  genderFilter(event: any) {
+    const genderValue = event.value;
+    this.filterGender = this.apiService.getFilteredGender(genderValue, this.dataCopy);
+    this.dataSource = this.filterGender;
+  }
 
-  onCountryFilter() {
-    this.countryValue = this.reportForm.value.countryName;
-    this.filteredStates = this.stateList.filter((state: { countryname: any; }) => state.countryname === this.countryValue);
-
-    this.countryDa = this.countries.find((country: { countryname: any; }) => country.countryname === this.countryValue);
-
-    if (this.genderData) {
-      this.filteredCountryData = this.genderData.filter((item: any) => item.selectedCountry === this.countryValue);
-      this.dataSource = this.filteredCountryData;
-
+  onCountryFilter(event: any) {
+    this.countryValue = event.value;
+    this.filteredStates = this.apiService.getFilteredStates(this.countryValue,this.stateList)
+    if (this.filterGender) {
+      this.filterCountry = this.apiService.getFilteredCountry(this.countryValue, this.filterGender);
+      this.dataSource = this.filterCountry;
     } else {
-      alert('Please select a valid country.');
-      this.filteredCountryData = [];
+      Swal.fire('Warning...', "First Select Gender", 'warning')
+      this.filterCountry = [];
       this.filteredStates = [];
       this.reportForm.patchValue({ countryName: '' });
-
-    }
-
-
-  }
-
-  genderFilter() {
-
-    const selectedGender = this.reportForm.value.genderName;
-    this.genderData = this.dataCopy.filter((item: { Gender: string; }) => item.Gender.toLowerCase() === selectedGender);
-    this.dataSource = this.genderData;
-  }
-
-  stateFilter() {
-    this.stateValue = this.reportForm.value.stateName;
-    this.filteredStates = this.stateList.filter((state: { countryname: any; }) => state.countryname === this.countryValue);
-    if (this.filteredCountryData) {
-      this.filteredStateData = this.filteredCountryData.filter((item: any) => item.selectedState === this.stateValue);
-      this.dataSource = this.filteredStateData;
-
-    } else {
-      alert('select the Country');
-      this.filteredStateData = [];
     }
 
   }
+
+  stateFilter(event: any) {
+    const stateValue = event.value;
+    if (stateValue) {
+      this.filteredstateValues = this.apiService.filteredStates(stateValue, this.filterCountry);
+      this.dataSource = this.filteredstateValues;
+    }else{
+      Swal.fire('Warning...', "First Select Country", 'warning');
+      this.reportForm.patchValue({ stateName: '' });
+    }
+
+  }
+
+  
   toClear() {
     this.reportForm.reset();
     this.getEmployeDetails();
@@ -161,8 +156,6 @@ export class UserReportComponent {
     }).catch(error => {
       console.error('Navigation error:', error);
     });
-
-
   }
 
   addEmployee() {

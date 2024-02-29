@@ -35,9 +35,26 @@ export class UserRegisterComponent implements OnInit {
     private router: Router,
     public activeRoute: ActivatedRoute,
     private apiService: ApiServicesService,
-
     @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.userReg = this.fb.group({
+
+    this.userReg = this.initializeUserForm();
+  }
+
+  ngOnInit() {
+
+    this.activeRoute.params.subscribe((paramsId: any) => {
+      this.employeeId = paramsId
+    })
+
+    if (this.employeeId.id) {
+      this.getEmployeDetails();
+    } else {
+      this.getDefaultData();
+    }
+  }
+
+  initializeUserForm() {
+    return this.fb.group({
       fullname: ['', [Validators.required, Validators.maxLength(20)]],
       mobnum: ['', [Validators.required, Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email]],
@@ -51,8 +68,6 @@ export class UserRegisterComponent implements OnInit {
       confirmPass: ['', [Validators.required, this.apiService.matchPasswords.bind(this)]]
     }, { validator: this.apiService.matchPasswords });
 
-
-
   }
   // matchPasswords(formGroup: FormGroup) {
   //   const password = formGroup.get('createPass')?.value;
@@ -64,18 +79,7 @@ export class UserRegisterComponent implements OnInit {
   //   }
   // }
 
-  ngOnInit() {
 
-    this.activeRoute.params.subscribe((paramsId: any) => {
-      this.employeeId = paramsId
-    })
-
-    if (this.employeeId.id) {
-      this.getEmployeDetails();
-    } else {
-      this.JsonData();
-    }
-  }
 
   getEmployeDetails() {
     this.apiService.getEmployeeDetails().subscribe({
@@ -94,7 +98,7 @@ export class UserRegisterComponent implements OnInit {
     })
   }
 
-  JsonData() {
+  getDefaultData() {
     this.apiService.getCountryData().subscribe((data) => {
       this.countries = data;
     })
@@ -142,64 +146,32 @@ export class UserRegisterComponent implements OnInit {
     })
   }
 
-  onCountryChange() {
+  onCountryChange(event: any) {
 
-    const selectedCountry = this.getSelectedCountry();
-    const countryData = this.getCountryDataa(selectedCountry);
-    this.filteredStates = this.getFilteredStates(countryData);
-    this.updateStateAndCity(countryData);
+    const selectedCountry = event.value;
+    this.filteredStates = this.apiService.getFilteredStates(selectedCountry, this.stateList);
     this.resetFormControls();
-  }
 
-  getSelectedCountry(): string {
-    return this.userReg.value.selectedCountry;
-  }
-
-  getCountryDataa(selectedCountry: string): any {
-    return this.countries.find((country: { countryname: any; }) => country.countryname === selectedCountry);
-  }
-
-  getFilteredStates(countryData: any): any[] {
-    if (countryData) {
-      const selectedCountryname = countryData.countryname;
-      return this.stateList.filter((state: { countryname: any; }) => state.countryname === selectedCountryname);
-    } else {
-      return [];
-    }
-  }
-
-  updateStateAndCity(countryData: any) {
-    if (countryData) {
-      this.state = countryData.states;
-      this.userReg.controls['selectedCity'].reset();
-      this.city = [];
-    } else {
-      this.state = [];
-    }
   }
 
   resetFormControls(): void {
     this.userReg.patchValue({ selectedState: '' });
-    this.city = [];
     this.filteredCities = [];
-    // this.city = [];
   }
 
   onStateChange(event: any) {
+    const selectedState = event.value;
+    this.updateCity(selectedState);
+  }
 
-    const selectedState = this.userReg.value.selectedState;
-    const stateData = this.stateList.find((state: { statename: any; }) => state.statename === selectedState);
-    if (stateData) {
-      const selectedStatename = stateData.statename;
-      this.filteredCities = this.citiList.filter((city: any) => city.statename === selectedStatename);
+  updateCity(selectedState: any) {
+    if (selectedState) {
+      this.filteredCities = this.apiService.getFilteredCities(selectedState, this.citiList);
     } else {
+      this.userReg.patchValue({ selectedCity: '' });
       this.filteredCities = [];
+
     }
-
-    this.userReg.patchValue({ selectedCity: '' });
-    this.city = [];
-
-
   }
 
   onSubmit() {
@@ -208,9 +180,9 @@ export class UserRegisterComponent implements OnInit {
       const formData = this.userReg.value;
       console.log(formData);
 
-      if (this.employeeId.id) { 
+      if (this.employeeId.id) {
         console.log(this.data)
-        const employeeId = this.employeeId.id; 
+        const employeeId = this.employeeId.id;
         this.httpClient.put(`https://retoolapi.dev/lcqe0N/empData/${employeeId}`, formData).subscribe({
           next: (val: any) => {
             alert("Employee Detail Updated");
@@ -242,4 +214,4 @@ export class UserRegisterComponent implements OnInit {
   }
 }
 
-  
+

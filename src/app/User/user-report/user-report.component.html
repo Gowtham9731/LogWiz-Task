@@ -23,7 +23,7 @@
                 <div class="col form-group">
                     <mat-form-field appearance="outline">
                         <mat-label>Sort By Gender</mat-label>
-                        <mat-select formControlName="genderName" (selectionChange)="genderFilter()">
+                        <mat-select formControlName="genderName" (selectionChange)="genderFilter($event)">
                             <mat-option value="male">Male</mat-option>
                             <mat-option value="female">Female</mat-option>
                             <mat-option value="others">Others</mat-option>
@@ -33,7 +33,7 @@
                 <div class="col form-group">
                     <mat-form-field appearance="outline">
                         <mat-label>Sort By Country</mat-label>
-                        <mat-select formControlName="countryName" (selectionChange)="onCountryFilter()">
+                        <mat-select formControlName="countryName" (selectionChange)="onCountryFilter($event)">
                             <mat-option *ngFor="let country of countries"
                                 [value]="country.countryname">{{country.countryname}}</mat-option>
                         </mat-select>
@@ -41,8 +41,8 @@
                 </div>
                 <div class="col form-group">
                     <mat-form-field appearance="outline">
-                        <mat-label>Sort By State</mat-label>
-                        <mat-select formControlName="stateName" (selectionChange)="stateFilter()">
+                        <mat-label>Sort By State</mat-label>    
+                        <mat-select formControlName="stateName" (selectionChange)="stateFilter($event)">
                             <mat-option *ngFor="let state of filteredStates"
                                 [value]="state.statename">{{state.statename}}</mat-option>
                         </mat-select>
